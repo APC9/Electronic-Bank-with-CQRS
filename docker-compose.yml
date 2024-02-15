@@ -24,3 +24,54 @@ services:
       - 3306
     volumes:
       - ./data:/data/db
+
+  jenkins:
+        image: jenkins/docker 
+        build: dockerjenkins
+        ports:
+            - 8080:8080
+            - 50000:50000
+        container_name: jenkins
+        privileged: true
+        user: root
+        volumes:
+            - $PWD/jenkins_home:/var/jenkins_home
+            - /var/run/docker.sock:/var/run/docker.sock
+        networks:
+            - net
+
+  sonarqubeDb:
+      container_name: sonarqube_db
+      image: postgres:13
+      networks:
+          - net
+      environment:
+          POSTGRES_USER: sonar
+          POSTGRES_PASSWORD: sonar
+      volumes:
+        - $PWD/postgres-data:/var/lib/postgressql/data
+
+  sonarqube:
+      container_name: sonarqube
+      image: sonarqube:lts
+      platform: linux/amd64
+      ports:
+        - 9000:9000
+        - 9092:9092
+      networks:
+          - net
+      environment:
+          SONARQUBE_JDBC_USERNAME: sonar
+          SONARQUBE_JDBC_PASSWORD: sonar
+          SONARQUBE_JDBC_URL: "jdbc:postgressql://postgres:5432/sonar"
+      depends_on:
+          - sonarqubeDb
+
+volumes:
+  docker_sock:
+ 
+networks:
+    net:
+
+
+# token de sonarqube para jenkins:squ_d8b7cf89e2346e80e8c054663b9094644dccbad1
