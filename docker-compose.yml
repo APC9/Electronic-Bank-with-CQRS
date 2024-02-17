@@ -12,12 +12,9 @@ services:
   db-bank:
     container_name: db-bank
     image: mysql:8.2
-    restart: unless-stopped
     environment:
-      MYSQL_DATABASE: cqrs_bank
-      MYSQL_USER: admin
-      MYSQL_PASSWORD: admin
       MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: root
     ports:
       - 3306:3306
     expose:
@@ -73,5 +70,4 @@ volumes:
 networks:
     net:
 
-
-# token de sonarqube para jenkins:squ_d8b7cf89e2346e80e8c054663b9094644dccbad1
+# squ_8f7cfe86394e2b85c9f1a361b923f168c9ff3f60
